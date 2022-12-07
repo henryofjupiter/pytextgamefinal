@@ -14,6 +14,26 @@ def status(currentlocat, inventory, itemsavail):
     print(itemsavail)
 
 
+def validate(user, new_loc):
+    """validates user input"""
+    incre = 0
+    while True:
+        if 'exit' in user:
+            print('You have exited the game')
+            break
+        if (len(user) > 1) and ((user[1]) in directions):
+            user = user[1]
+            return user
+        elif (len(user) == 0) and ((user[0]) in directions):
+            print('Invalid Input, Try Again')
+            user = input_loop(user, new_loc)
+            incre += 1
+        elif (user[0] or user[1]) not in directions:
+            print('Invalid Input, Try Again')
+            user = input_loop(user, new_loc)
+            incre += 1
+
+
 # room navigation with dictionaries
 def main():
     lands = {
@@ -29,7 +49,7 @@ def main():
 
 
 # directions
-directions = ['Up', 'Down', 'Right', 'Left' ]
+directions = ['Up', 'Down', 'Right', 'Left']
 
 # starting point
 current_location = 'Grass Lands'
@@ -38,3 +58,4 @@ inventory = []
 # gameplay loop
 while True:
     user_input = input('Enter Directions\n').split()
+    user_input = validate(user_input, current_location)
