@@ -28,10 +28,13 @@ def main():
     }
 
 
+# directions
+directions = ['Up', 'Down', 'Right', 'Left' ]
+
 # starting point
 current_location = 'Grass Lands'
 inventory = []
 
+# gameplay loop
 while True:
     user_input = input('Enter Directions\n').split()
-
