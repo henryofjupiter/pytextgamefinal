@@ -38,24 +38,59 @@ def validate(user, new_loc):
 def main():
     lands = {
         'Grass Lands': {'right': 'Swamp Lands'},
-        'Swamp Lands': {'down': 'Jungle Lands', 'right': 'Grass Lands', 'item': 'King of Spades'},
-        'Jungle Lands': {'up': 'Swamp Lands', 'left': 'The Abyss', 'right': ' Mountain Lands', 'down': 'Check Point'},
+        'Swamp Lands': {'down': 'Jungle Lands', 'right': 'Grass Lands', 'item': 'Spade'},
+        'Jungle Lands': {'up': 'Swamp Lands', 'left': 'The Abyss', 'right': ' Mountain Lands', 'down': 'Check Point',
+                         'item': 'Heart'},
         'The Abyss': {'right': 'Jungle Lands'},
-        'Mountain Lands': {'left': 'Jungle Lands', 'up': 'Desert Lands'},
-        'Desert Lands': {'down': 'Mountain Lands'},
-        'Check Point': {'up': 'Jungle Lands', 'right': 'Stone Lands'},
-        'Stone Lands': {'right': 'Check Point'}
+        'Mountain Lands': {'left': 'Jungle Lands', 'up': 'Desert Lands', 'item': 'Diamond'},
+        'Desert Lands': {'down': 'Mountain Lands', 'item': 'Clubs'},
+        'Check Point': {'up': 'Jungle Lands', 'right': 'Stone Lands'},  # create weapon here
+        'Stone Lands': {'right': 'Check Point'} # villain 
     }
 
+    # directions
+    directions = ['Up', 'Down', 'Right', 'Left']
 
-# directions
-directions = ['Up', 'Down', 'Right', 'Left']
+    # starting point
+    current_location = 'Grass Lands'
+    inventory = []
 
-# starting point
-current_location = 'Grass Lands'
-inventory = []
+    # gameplay loop
+    while True:
+        user_input = input('Enter Directions\n').split()
+        user_input = validate(user_input, current_location)
 
-# gameplay loop
-while True:
-    user_input = input('Enter Directions\n').split()
-    user_input = validate(user_input, current_location)
+        if user_input == 'exit':
+            print('You have exited the game')
+            break
+
+        elif current_location == 'Grass Lands':
+            if user_input not in directions:
+                print('Try Again')
+            elif (user_input in directions) and (user_input != 'Left'):
+                print('Wrong Turn')
+                instruct(current_location)
+            else:
+                current_location = room_mov(current_location, user_input)
+                print(current_location)
+                instruct(current_location)
+
+        elif current_location == 'Bedroom':
+            if (user_input == 'North') or (user_input == 'East'):
+                current_location = room_mov(current_location, user_input)
+                instruct(current_location)
+            elif (user_input in directions) and (user_input != 'North' or 'East'):
+                print('Wrong Turn')
+                instruct(current_location)
+            elif user_input not in directions:
+                print('Try again')
+
+        elif current_location == 'Cellar':
+            if user_input not in directions:
+                print('Try again')
+            elif user_input in directions and user_input != 'West':
+                print('Wrong Turn')
+                instruct(current_location)
+            else:
+                current_location = room_mov(current_location, user_input)
+                instruct(current_location)
