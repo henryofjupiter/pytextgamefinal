@@ -31,3 +31,7 @@ def main():
 # starting point
 current_location = 'Grass Lands'
 inventory = []
+
+while True:
+    user_input = input('Enter Directions\n').split()
+
