@@ -4,7 +4,8 @@
 def instructions():
     print('Navigate the game and collect items')
     print('To Move Input: go Up, go Down, go Right, go Left')
-    print('To Get Item Input: get <item>')
+    print("To Get Item Input: get 'item'")
+    print('--------------------------')
 
 
 # status update
@@ -19,6 +20,14 @@ def room_mov(cur_location, user):
     """uses dictionary to change location"""
     new_loc = lands[cur_location][user]
     return new_loc
+
+
+def input_loop(user):
+    """nested in validate function to continuously
+    ask for input from user"""
+    while user != 'go' or user != directions:
+        user = input("Enter Directions\n").split()
+        return user
 
 
 def validate(user, new_loc):
@@ -59,13 +68,14 @@ def main():
         'Stone Lands': {'right': 'Check Point'}  # villain
     }
 
+    instructions()
+
     # starting point
     current_location = 'Grass Lands'
     inventory = []
 
     # gameplay loop
     while True:
-        
         user_input = input('Enter Directions\n').split()
         user_input = validate(user_input, current_location)
 
@@ -81,7 +91,7 @@ def main():
             else:
                 current_location = lands[current_location][user_input]
                 print(current_location)
-                instructions()
+
 
         # elif current_location == 'Swamp Lands':
         #     if (user_input == 'North') or (user_input == 'East'):
