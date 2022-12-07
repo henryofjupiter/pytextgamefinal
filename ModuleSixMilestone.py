@@ -1,5 +1,3 @@
-# Oshard Henry
-
 # instructions
 def instructions():
     print('Navigate the game and collect items')
@@ -11,8 +9,8 @@ def instructions():
 # status update
 def status(currentlocat, inventory, itemsavail):
     print('You are at:', currentlocat)
-    print(inventory)
-    print(itemsavail)
+    print('Items Available:', itemsavail)
+    print('Inventory:', inventory)
 
 
 # moving through locations
@@ -30,7 +28,7 @@ def input_loop(user):
         return user
 
 
-def validate(user, new_loc):
+def validate(user):
     """validates user input"""
     incre = 0
     while True:
@@ -42,11 +40,11 @@ def validate(user, new_loc):
             return user
         elif (len(user) == 0) and ((user[0]) in directions):
             print('Invalid Input, Try Again')
-            user = input_loop(user, new_loc)
+            user = input_loop(user)
             incre += 1
         elif (user[0] or user[1]) not in directions:
             print('Invalid Input, Try Again')
-            user = input_loop(user, new_loc)
+            user = input_loop(user)
             incre += 1
 
 
@@ -77,7 +75,7 @@ def main():
     # gameplay loop
     while True:
         user_input = input('Enter Directions\n').split()
-        user_input = validate(user_input, current_location)
+        user_input = validate(user_input)
 
         if user_input == 'exit':
             print('You have exited the game')
@@ -90,8 +88,9 @@ def main():
                 print('Wrong Turn')
             else:
                 current_location = lands[current_location][user_input]
-                print(current_location)
-
+                itemsavail = lands[current_location]['item']
+                status(current_location, inventory, itemsavail)
+                print()
 
         # elif current_location == 'Swamp Lands':
         #     if (user_input == 'North') or (user_input == 'East'):
