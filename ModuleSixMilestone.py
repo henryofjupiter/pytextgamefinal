@@ -9,7 +9,7 @@ def instructions():
 # status update
 def status(currentlocat, inventory, itemsavail):
     print('You are at:', currentlocat)
-    print('Items Available:', itemsavail)
+    print('You see a', itemsavail)
     print('Inventory:', inventory)
 
 
@@ -35,8 +35,11 @@ def validate(user):
         if 'exit' in user:
             print('You have exited the game')
             break
-        if (len(user) > 1) and ((user[1]) in directions):
-            user = user[1]
+        if len(user) > 1:
+            if (user[0]) == 'go' and (user[1]) in directions:
+                user = user[1]
+            if (user[0]) == 'get' and (user[1]) in itemsGame:
+                user = user[1]
             return user
         elif (len(user) == 0) and ((user[0]) in directions):
             print('Invalid Input, Try Again')
@@ -50,7 +53,7 @@ def validate(user):
 
 # directions
 directions = ['Up', 'Down', 'Right', 'Left']
-
+itemsGame = ['Spade', 'Heart', 'Diamond', 'Clubs']
 
 # room navigation with dictionaries
 def main():
@@ -74,7 +77,7 @@ def main():
 
     # gameplay loop
     while True:
-        user_input = input('Enter Directions\n').split()
+        user_input = input('Enter Command\n').split()
         user_input = validate(user_input)
 
         if user_input == 'exit':
@@ -90,8 +93,13 @@ def main():
                 current_location = lands[current_location][user_input]
                 itemsavail = lands[current_location]['item']
                 status(current_location, inventory, itemsavail)
-                print()
-        # work feature to pick up items
+                print('----------------------')
+
+            if user_input == 'get Spade':
+                inventory.append(itemsavail)
+                print(inventory)
+
+        # work on feature to pick up items
 
         # elif current_location == 'Swamp Lands':
         #     if (user_input == 'North') or (user_input == 'East'):
