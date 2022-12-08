@@ -23,9 +23,9 @@ def status(currentlocat, inventory, itemsavail):
 def input_loop(user):
     """nested in validate function to continuously
     ask for input from user"""
-    while user != 'go' or user != directions:
-        user = input("Enter Directions\n").split()
-        return user
+    while (user != 'go') or (user == directions):
+        users = input(">Enter Command\n").split()
+        return users
 
 
 def validate(user):
@@ -37,10 +37,11 @@ def validate(user):
             break
         if len(user) > 1:
             if (user[0]) == 'go' and (user[1]) in directions:
-                user = user[1]
+                users = user[1]
+                return users
             if (user[0]) == 'get' and (user[1]) in itemsGame:
-                user = user[1]
-            return user
+                users = user[1]
+                return users
         elif (len(user) == 0) and ((user[0]) in directions):
             print('Invalid Input, Try Again')
             user = input_loop(user)
@@ -49,11 +50,15 @@ def validate(user):
             print('Invalid Input, Try Again')
             user = input_loop(user)
             incre += 1
+        else:
+            print('Invalid Input, Try Again')
+            user = input_loop(user)
 
 
 # directions
 directions = ['Up', 'Down', 'Right', 'Left']
 itemsGame = ['Spade', 'Heart', 'Diamond', 'Clubs']
+
 
 # room navigation with dictionaries
 def main():
@@ -77,27 +82,17 @@ def main():
 
     # gameplay loop
     while True:
-        user_input = input('Enter Command\n').split()
+        user_input = input('>Enter Command\n').split(' ')
         user_input = validate(user_input)
 
-        if user_input == 'exit':
-            print('You have exited the game')
-            break
-
-        elif current_location == 'Grass Lands':
-            if user_input not in directions:
-                print('Try Again')
-            elif (user_input in directions) and (user_input != 'Left'):
-                print('Wrong Turn')
-            else:
+        if current_location == 'Grass Lands':
+            if user_input == 'Left':
                 current_location = lands[current_location][user_input]
                 itemsavail = lands[current_location]['item']
                 status(current_location, inventory, itemsavail)
                 print('----------------------')
-
-            if user_input == 'get Spade':
-                inventory.append(itemsavail)
-                print(inventory)
+            else:
+                print('Wrong turn, Try again')
 
         # work on feature to pick up items
 
