@@ -14,10 +14,10 @@ def status(currentlocat, inventory, itemsavail):
 
 
 # moving through locations
-def room_mov(cur_location, user):
-    """uses dictionary to change location"""
-    new_loc = lands[cur_location][user]
-    return new_loc
+# def room_mov(cur_location, user):
+#     """uses dictionary to change location"""
+#     new_loc = lands[cur_location][user]
+#     return new_loc
 
 
 def input_loop(user):
@@ -91,6 +91,7 @@ def main():
                 itemsavail = lands[current_location]['item']
                 status(current_location, inventory, itemsavail)
                 print()
+        # work feature to pick up items
 
         # elif current_location == 'Swamp Lands':
         #     if (user_input == 'North') or (user_input == 'East'):
