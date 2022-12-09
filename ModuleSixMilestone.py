@@ -25,6 +25,19 @@ def input_loop(user):
         return users
 
 
+def fuse_items(inventory):
+    if (len(inventory)) == 4:
+        print('press "F" to fuse items')
+        incre = 0
+        while True:
+            user = input('>>ENTER COMMAND<<\n')
+            incre += 1
+            if user == 'F':
+                return user
+            elif user != 'F':
+                continue
+
+
 def validate(user):
     """validates user input"""
     incre = 0
@@ -36,12 +49,12 @@ def validate(user):
             if (user[0]) == 'go' and (user[1]) in directions:
                 users = user[1]
                 return users
-            elif (user[0]) != 'go':
-                print('Invalid Input, Try Again')
-                user = input_loop(user)
             if (user[0]) == 'get' and (user[1]) in itemsGame:
                 users = user[1]
                 return users
+            if (user[0]) != 'go':
+                print('Invalid Input, Try Again')
+                user = input_loop(user)
         elif (len(user) == 0) and ((user[0]) in directions):
             print('Invalid Input, Try Again')
             user = input_loop(user)
@@ -65,13 +78,13 @@ def main():
     lands = {
         'Grass Lands': {'Left': 'Swamp Lands'},
         'Swamp Lands': {'Down': 'Jungle Lands', 'Right': 'Grass Lands', 'item': 'Spade'},
-        'Jungle Lands': {'Up': 'Swamp Lands', 'Left': 'The Abyss', 'right': ' Mountain Lands', 'Down': 'Check Point',
+        'Jungle Lands': {'Up': 'Swamp Lands', 'Left': 'The Abyss', 'Right': 'Mountain Lands', 'Down': 'Check Point',
                          'item': 'Heart'},
-        'The Abyss': {'right': 'Jungle Lands'},
-        'Mountain Lands': {'left': 'Jungle Lands', 'up': 'Desert Lands', 'item': 'Diamond'},
-        'Desert Lands': {'down': 'Mountain Lands', 'item': 'Clubs'},
-        'Check Point': {'up': 'Jungle Lands', 'right': 'Stone Lands'},  # create weapon here
-        'Stone Lands': {'right': 'Check Point'}  # villain
+        'The Abyss': {'Right': 'Jungle Lands'},
+        'Mountain Lands': {'Left': 'Jungle Lands', 'Up': 'Desert Lands', 'item': 'Diamond'},
+        'Desert Lands': {'Down': 'Mountain Lands', 'item': 'Clubs'},
+        'Check Point': {'Up': 'Jungle Lands', 'Right': 'Stone Lands'},  # create weapon here
+        'Stone Lands': {'Left': 'Check Point'}  # villain
     }
 
     instructions()
@@ -79,6 +92,7 @@ def main():
     # starting point
     current_location = 'Grass Lands'
     inventory = []
+    weapon = ''
 
     # gameplay loop
     while True:
@@ -114,7 +128,7 @@ def main():
                 print('----------------------')
 
         elif current_location == 'Jungle Lands':
-            if user_input == 'Up' or user_input == 'Right':
+            if (user_input == 'Up') or (user_input == 'Right'):
                 current_location = lands[current_location][user_input]
                 itemsavail = lands[current_location]['item']
                 status(current_location, inventory, itemsavail)
@@ -126,9 +140,12 @@ def main():
                 print('----------------------')
 
             elif user_input == 'Left':
+                current_location = lands[current_location][user_input]
                 status(current_location, inventory, itemsavail=0)
-                print('GAME OVER')
+                print('You have entered', current_location)
+                print('>>>GAME OVER<<<')
                 break
+
             elif user_input == 'Down':
                 current_location = lands[current_location][user_input]
                 status(current_location, inventory, itemsavail=0)
@@ -139,10 +156,35 @@ def main():
                     print('before proceeding')
                     print('----------------------')
                 else:
-                    continue
-            elif user_input == 'Right':
+                    weapon = fuse_items(inventory)
+
+        elif current_location == 'Mountain Lands':
+            if user_input == 'Up':
                 current_location = lands[current_location][user_input]
+                itemsavail = lands[current_location]['item']
                 status(current_location, inventory, itemsavail)
+                print('----------------------')
+            else:
+                print('Wrong turn, Try again')
+
+            if user_input == 'Clubs':
+                inventory.append(itemsavail)
+                status(current_location, inventory, itemsavail=0)
+                print('----------------------')
+
+        elif current_location == 'Check Point':
+            if user_input == 'Right':
+                current_location = lands[current_location][user_input]
+                status(current_location, inventory, itemsavail=0)
+                print('You see Hisoka Morow')
+                if len(weapon) < 1:
+                    print('He kills you')
+                    print('GAME OVER')
+                    break
+                else:
+                    print('You defeated the evil clown')
+            else:
+                print('Wrong turn, Try again')
 
 
 main()
