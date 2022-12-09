@@ -36,6 +36,9 @@ def validate(user):
             if (user[0]) == 'go' and (user[1]) in directions:
                 users = user[1]
                 return users
+            elif (user[0]) != 'go':
+                print('Invalid Input, Try Again')
+                user = input_loop(user)
             if (user[0]) == 'get' and (user[1]) in itemsGame:
                 users = user[1]
                 return users
@@ -130,15 +133,16 @@ def main():
                 current_location = lands[current_location][user_input]
                 status(current_location, inventory, itemsavail=0)
                 if len(inventory) < 4:
-                    print('!WARNING! WARNING!')
+                    print('!WARNING! !WARNING!')
                     print('If you dont have all four')
                     print('items collect them first')
                     print('before proceeding')
                     print('----------------------')
                 else:
                     continue
-
-        # PICK UP ITEMS
+            elif user_input == 'Right':
+                current_location = lands[current_location][user_input]
+                status(current_location, inventory, itemsavail)
 
 
 main()
