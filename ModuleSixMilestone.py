@@ -44,8 +44,8 @@ def validate(user):
     while True:
         if 'exit' in user:
             print('You have exited the game')
-            break
-        if len(user) > 1:
+            return user
+        elif len(user) > 1:
             if (user[0]) == 'go' and (user[1]) in directions:
                 users = user[1]
                 return users
@@ -60,11 +60,11 @@ def validate(user):
             user = input_loop(user)
             incre += 1
         elif (user[0] or user[1]) not in directions:
-            print('Invalid Input, Try Again')
+            print('1Invalid Input, Try Again')
             user = input_loop(user)
             incre += 1
         else:
-            print('Invalid Input, Try Again')
+            print('2Invalid Input, Try Again')
             user = input_loop(user)
 
 
@@ -96,9 +96,12 @@ def main():
 
     # gameplay loop
     while True:
-        user_input = input('>>ENTER COMMAND<<\n').split(' ')
+        user_input = input('>>ENTER COMMAND<<\n').split()
         user_input = validate(user_input)
         print('---------------------')
+
+        if 'exit' in user_input:
+            break
 
         if current_location == 'Grass Lands':
             if user_input == 'Left':
@@ -109,21 +112,24 @@ def main():
             else:
                 print('Wrong turn, Try again')
 
-        # work on feature to pick up items
-
         elif current_location == 'Swamp Lands':
-            if user_input == 'Down':
-                current_location = lands[current_location][user_input]
-                itemsavail = lands[current_location]['item']
-                status(current_location, inventory, itemsavail)
-                print('----------------------')
-            if user_input == 'Spade':
+            if (user_input == 'Down') or (user_input == 'Right'):
+                if user_input == 'Down':
+                    # jungle lands
+                    current_location = lands[current_location][user_input]
+                    itemsavail = lands[current_location]['item']
+                    status(current_location, inventory, itemsavail)
+                    print('----------------------')
+                elif user_input == 'Right':
+                    # grass lands
+                    current_location = lands[current_location][user_input]
+                    status(current_location, inventory, itemsavail=0)
+                    print('----------------------')
+                else:
+                    print('Wrong Turn')
+            elif user_input == itemsavail:
                 inventory.append(itemsavail)
-                status(current_location, inventory, itemsavail=0)
-                print('----------------------')
-
-            elif user_input == 'Right':
-                current_location = lands[current_location][user_input]
+                lands[current_location]['item'] = 'no item here'
                 status(current_location, inventory, itemsavail=0)
                 print('----------------------')
 
@@ -133,44 +139,69 @@ def main():
                 itemsavail = lands[current_location]['item']
                 status(current_location, inventory, itemsavail)
                 print('----------------------')
+            if (user_input == 'Left') or (user_input == 'Down'):
+                if user_input == 'Left':
+                    current_location = lands[current_location][user_input]
+                    status(current_location, inventory, itemsavail=0)
+                    print('You have entered', current_location)
+                    print('>>>GAME OVER<<<')
+                    break
+                elif user_input == 'Down':
+                    current_location = lands[current_location][user_input]
+                    status(current_location, inventory, itemsavail=0)
+                    if len(inventory) < 4:
+                        print('!WARNING! !WARNING!')
+                        print('If you dont have all four')
+                        print('items collect them first')
+                        print('before proceeding')
+                        print('----------------------')
+                    else:
+                        weapon = fuse_items(inventory)
 
-            if user_input == 'Heart':
+            elif user_input == itemsavail:
                 inventory.append(itemsavail)
+                lands[current_location]['item'] = 'no item here'
                 status(current_location, inventory, itemsavail=0)
                 print('----------------------')
 
-            elif user_input == 'Left':
-                current_location = lands[current_location][user_input]
-                status(current_location, inventory, itemsavail=0)
-                print('You have entered', current_location)
-                print('>>>GAME OVER<<<')
-                break
-
-            elif user_input == 'Down':
-                current_location = lands[current_location][user_input]
-                status(current_location, inventory, itemsavail=0)
-                if len(inventory) < 4:
-                    print('!WARNING! !WARNING!')
-                    print('If you dont have all four')
-                    print('items collect them first')
-                    print('before proceeding')
-                    print('----------------------')
-                else:
-                    weapon = fuse_items(inventory)
+            # elif user_input == 'Left':
+            #     current_location = lands[current_location][user_input]
+            #     status(current_location, inventory, itemsavail=0)
+            #     print('You have entered', current_location)
+            #     print('>>>GAME OVER<<<')
+            #     break
+            #
+            # elif user_input == 'Down':
+            #     current_location = lands[current_location][user_input]
+            #     status(current_location, inventory, itemsavail=0)
+            #     if len(inventory) < 4:
+            #         print('!WARNING! !WARNING!')
+            #         print('If you dont have all four')
+            #         print('items collect them first')
+            #         print('before proceeding')
+            #         print('----------------------')
+            #     else:
+            #         weapon = fuse_items(inventory)
 
         elif current_location == 'Mountain Lands':
-            if user_input == 'Up':
-                current_location = lands[current_location][user_input]
-                itemsavail = lands[current_location]['item']
-                status(current_location, inventory, itemsavail)
-                print('----------------------')
-            else:
-                print('Wrong turn, Try again')
+            if (user_input == 'Up') or (user_input == 'Left'):
+                if user_input == 'Up':
+                    current_location = lands[current_location][user_input]
+                    itemsavail = lands[current_location]['item']
+                    status(current_location, inventory, itemsavail)
+                    print('----------------------')
+                if user_input == 'Left':
+                    current_location = lands[current_location][user_input]
+                    itemsavail = lands[current_location]['item']
+                    status(current_location, inventory, itemsavail)
+                    print('----------------------')
+                else:
+                    print('Wrong turn, Try again')
 
-            if user_input == 'Clubs':
+            if user_input == itemsavail:
                 inventory.append(itemsavail)
+                lands[current_location]['item'] = 'no item here'
                 status(current_location, inventory, itemsavail=0)
-                print('----------------------')
 
         elif current_location == 'Check Point':
             if user_input == 'Right':
